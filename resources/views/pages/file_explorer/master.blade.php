@@ -12,7 +12,9 @@
                         @include('pages.file_explorer.partials.directory-tree')
 
                         <!-- Main Panel - Files List -->
-                        @include('pages.file_explorer.partials.files-list')
+                        <div id="directory-content">
+                            @include('pages.file_explorer.partials.files-list')
+                        </div>
                     </div>
                 </div>
             </div>

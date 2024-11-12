@@ -35,7 +35,7 @@ class FileExplorerService
             ->get();
             
         $files = $directory->files()
-            ->select(['id', 'name', 'size', 'mime_type', 'extension', 'created_at', 'updated_at'])
+            ->select(['id', 'name', 'size', 'mime_type', 'path', 'extension', 'created_at', 'updated_at'])
             ->get();
             
         return [

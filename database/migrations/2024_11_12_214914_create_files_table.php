@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('telegram_peer_id');
-            $table->string('telegram_file_path');
-            $table->string('telegram_message_id');
+            $table->string('telegram_peer_id')->nullable();
+            $table->string('telegram_file_path')->nullable();
+            $table->string('telegram_message_id')->nullable();
             $table->uuid('uuid')->unique();
             $table->string('name')->nullable();
             $table->string('path')->nullable();

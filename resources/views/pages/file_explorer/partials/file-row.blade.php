@@ -1,9 +1,9 @@
-<tr class="hover:bg-gray-50 cursor-pointer" data-path="{{ $content['path'] }}">
+<tr class="hover:bg-gray-50 cursor-pointer" data-path="{{ $directoryContent->path }}">
     {{-- Icon + Name Column --}}
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="flex items-center">
             <div class="flex-shrink-0 w-5 h-5">
-                @if($content['type'] === 'directory')
+                @if($directoryContent->type === 'directory')
                     <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                     </svg>
@@ -15,7 +15,7 @@
             </div>
             <div class="ml-4">
                 <div class="text-sm font-medium text-gray-900">
-                    {{ $content['name'] }}
+                    {{ $directoryContent->name }}
                 </div>
             </div>
         </div>
@@ -24,8 +24,8 @@
     {{-- Size Column --}}
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="text-sm text-gray-500">
-            @if($content['type'] === 'file')
-                {{ $content['size'] }}
+            @if($directoryContent->type === 'file')
+                {{ $directoryContent->size }}
             @else
                 --
             @endif
@@ -35,19 +35,19 @@
     {{-- Last Modified Column --}}
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="text-sm text-gray-500">
-            {{ $content['last_modified'] }}
+            {{ $directoryContent->updated_at }}
         </div>
     </td>
 
     {{-- Actions Column --}}
     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <div class="flex justify-end space-x-2">
-            @if($content['type'] === 'file')
-                <button class="text-indigo-600 hover:text-indigo-900" onclick="downloadFile('{{ $content['path'] }}')">
+            @if($directoryContent->type === 'file')
+                <button class="text-indigo-600 hover:text-indigo-900" onclick="downloadFile('{{ $directoryContent->path }}')">
                     Download
                 </button>
             @endif
-            <button class="text-red-600 hover:text-red-900" onclick="deleteItem('{{ $content['path'] }}')">
+            <button class="text-red-600 hover:text-red-900" onclick="deleteItem('{{ $directoryContent->path }}')">
                 Delete
             </button>
         </div>

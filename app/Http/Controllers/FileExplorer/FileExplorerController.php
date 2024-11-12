@@ -7,7 +7,7 @@ use App\Services\FileExplorer\FileExplorerService;
 use App\Models\Directory;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\View\View;
 class FileExplorerController extends Controller
 {
     protected FileExplorerService $fileExplorer;
@@ -32,7 +32,7 @@ class FileExplorerController extends Controller
         // Prepare view data
         $viewData = [
             'directoryTree' => $directoryTree,
-            'contents' => $contents['directories']->merge($contents['files']),
+            'directoryContents' => $contents['directories']->merge($contents['files']),
             'breadcrumb' => $breadcrumb,
             'currentDirectory' => null
         ];
@@ -40,11 +40,15 @@ class FileExplorerController extends Controller
         return view('pages.file_explorer.master', $viewData);
     }
 
-    public function getDirectoryContents(int $directoryId): JsonResponse
+    public function getDirectoryContents(int $directoryId): JsonResponse|View
     {
-        return response()->json(
-            $this->fileExplorer->getDirectoryContents($directoryId)
-        );
+        $directoryContents = $this->fileExplorer->getDirectoryContents($directoryId);
+        $directoryContents = $directoryContents['directories']->merge($directoryContents['files']);
+        if (request()->wantsJson()) {   
+            return response()->json($directoryContents);
+        }
+
+        return view('pages.file_explorer.partials.files-list', ['directoryContents' => $directoryContents]);
     }
 
     public function createDirectory(Request $request)
