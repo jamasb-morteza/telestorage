@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\FileExplorer\FileExplorerController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -13,10 +13,10 @@ Route::group(['prefix' => 'file-explorer', 'middleware' => ['auth','verified']],
     Route::get('/', function () {
         return view('pages.file_explorer.master');
     });
-    Route::get('/', [FileManagerController::class, 'index'])->name('file-explorer.index');
-    Route::post('/', [FileManagerController::class, 'store'])->name('file-explorer.store');
-    Route::delete('/{path}', [FileManagerController::class, 'destroy'])->name('file-explorer.destroy'); 
-    Route::post('/create-directory', [FileManagerController::class, 'createDirectory'])->name('file-explorer.create-directory');
+    Route::get('/', [FileExplorerController::class, 'index'])->name('file-explorer.index');
+    Route::post('/', [FileExplorerController::class, 'store'])->name('file-explorer.store');
+    Route::delete('/{path}', [FileExplorerController::class, 'destroy'])->name('file-explorer.destroy'); 
+    Route::post('/create-directory', [FileExplorerController::class, 'createDirectory'])->name('file-explorer.create-directory');
 });
 
 Route::get('/dashboard', function () {

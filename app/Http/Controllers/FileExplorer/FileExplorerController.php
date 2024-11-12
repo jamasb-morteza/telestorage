@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\FileExplorer;
 
 use App\Services\FileManager\FileManagerService;
 use Illuminate\Http\Request;
-
-class FileManagerController extends Controller
+use App\Http\Controllers\Controller;
+class FileExplorerController extends Controller
 {
     protected $fileManager;
 

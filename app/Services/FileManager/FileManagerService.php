@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\FileManager;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -19,13 +19,18 @@ class FileManagerService
         $contents = collect($this->disk->listContents($path, false));
         
         return $contents->map(function ($item) {
+            $name = $item->path();
+            $name = basename($name);
+            
             return [
-                'name' => $item['basename'] ?? $item['filename'],
-                'path' => $item['path'],
-                'type' => $item['type'],
-                'size' => $item['type'] === 'file' ? $this->formatSize($item['size'] ?? 0) : '',
-                'last_modified' => date('Y-m-d H:i', $item['timestamp']),
-                'extension' => $item['extension'] ?? '',
+                'name' => $name,
+                'path' => $item->path(),
+                'type' => $item->type(),
+                'size' => $item->type() === 'file' ? ($item->fileSize() ?? 0) : 0,
+                'human_size' => $item->type() === 'file' ? $this->formatSize($item->fileSize() ?? 0) : '',
+                'last_modified' => date('Y-m-d H:i', $item->lastModified()),
+                'modified' => $item->lastModified(),
+                'extension' => pathinfo($item->path(), PATHINFO_EXTENSION),
             ];
         })->sortBy('type');
     }
