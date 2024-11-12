@@ -7,6 +7,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+// Group for file explorer routes
+Route::group(['prefix' => 'file-explorer', 'middleware' => ['auth','verified']], function () {
+    Route::get('/', function () {
+        return view('pages.file_explorer.master');
+    });
+    Route::get('/', [FileManagerController::class, 'index'])->name('file-explorer.index');
+    Route::post('/', [FileManagerController::class, 'store'])->name('file-explorer.store');
+    Route::delete('/{path}', [FileManagerController::class, 'destroy'])->name('file-explorer.destroy'); 
+    Route::post('/create-directory', [FileManagerController::class, 'createDirectory'])->name('file-explorer.create-directory');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
