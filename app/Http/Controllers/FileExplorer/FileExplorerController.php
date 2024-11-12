@@ -2,71 +2,209 @@
 
 namespace App\Http\Controllers\FileExplorer;
 
-use App\Services\FileManager\FileManagerService;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\FileExplorer\FileExplorerService;
+use App\Models\Directory;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
 class FileExplorerController extends Controller
 {
-    protected $fileManager;
+    protected FileExplorerService $fileExplorer;
 
-    public function __construct(FileManagerService $fileManager)
+    public function __construct(FileExplorerService $fileExplorer)
     {
-        $this->fileManager = $fileManager;
+        $this->fileExplorer = $fileExplorer;
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $path = $request->get('path', '');
-        $contents = $this->fileManager->listContents($path);
+
+        // Get directory tree for navigation
+        $directoryTree = $this->fileExplorer->getDirectoryTree();
+
+        // Get root directory contents
+        $contents = $this->fileExplorer->getDirectoryContents(1);
+
+        // Initialize empty breadcrumb for root level
+        $breadcrumb = [];
+
+        // Prepare view data
+        $viewData = [
+            'directoryTree' => $directoryTree,
+            'contents' => $contents['directories']->merge($contents['files']),
+            'breadcrumb' => $breadcrumb,
+            'currentDirectory' => null
+        ];
         
-        return view('pages.file_explorer.master', compact('contents', 'path'));
+        return view('pages.file_explorer.master', $viewData);
     }
 
-    public function store(Request $request)
+    public function getDirectoryContents(int $directoryId): JsonResponse
     {
-        $request->validate([
-            'file' => 'required|file',
-            'path' => 'required|string',
-        ]);
-
-        $uploaded = $this->fileManager->uploadFile(
-            $request->file('file'),
-            $request->path
+        return response()->json(
+            $this->fileExplorer->getDirectoryContents($directoryId)
         );
-
-        return response()->json([
-            'success' => $uploaded,
-            'message' => $uploaded ? 'File uploaded successfully' : 'Upload failed'
-        ]);
     }
 
     public function createDirectory(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'path' => 'required|string',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:directories,id'
         ]);
 
-        $path = trim($request->path . '/' . $request->name, '/');
-        $created = $this->fileManager->createDirectory($path);
+        $parent = $validated['parent_id'] ? Directory::find($validated['parent_id']) : null;
+        $directory = $this->fileExplorer->createDirectory($validated['name'], $parent);
 
-        return response()->json([
-            'success' => $created,
-            'message' => $created ? 'Directory created successfully' : 'Failed to create directory'
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json($directory, 201);
+        }
+
+        return back()->with('success', 'Directory created successfully');
     }
 
-    public function destroy(Request $request)
+    public function createFile(Request $request)
     {
-        $request->validate([
-            'path' => 'required|string',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'directory_id' => 'required|exists:directories,id',
+            'size' => 'required|integer',
+            'mime_type' => 'required|string',
+            'extension' => 'required|string'
         ]);
 
-        $deleted = $this->fileManager->deleteItem($request->path);
+        $file = $this->fileExplorer->createFile($validated);
 
-        return response()->json([
-            'success' => $deleted,
-            'message' => $deleted ? 'Item deleted successfully' : 'Failed to delete item'
+        if ($request->wantsJson()) {
+            return response()->json($file, 201);
+        }
+
+        return back()->with('success', 'File created successfully');
+    }
+
+    public function deleteDirectory(int $directoryId)
+    {
+        $this->fileExplorer->deleteDirectory($directoryId);
+
+        if (request()->wantsJson()) {
+            return response()->json(null, 204);
+        }
+
+        return back()->with('success', 'Directory deleted successfully');
+    }
+
+    public function deleteFile(int $fileId)
+    {
+        $this->fileExplorer->deleteFile($fileId);
+
+        if (request()->wantsJson()) {
+            return response()->json(null, 204);
+        }
+
+        return back()->with('success', 'File deleted successfully');
+    }
+
+    public function moveDirectory(Request $request, Directory $directory)
+    {
+        $validated = $request->validate([
+            'new_parent_id' => 'nullable|exists:directories,id'
         ]);
+
+        $newParent = $validated['new_parent_id'] ? Directory::find($validated['new_parent_id']) : null;
+        $this->fileExplorer->moveDirectory($directory, $newParent);
+
+        if ($request->wantsJson()) {
+            return response()->json(null, 200);
+        }
+
+        return back()->with('success', 'Directory moved successfully');
+    }
+
+    public function moveFile(Request $request, int $fileId)
+    {
+        $validated = $request->validate([
+            'new_directory_id' => 'required|exists:directories,id'
+        ]);
+
+        $this->fileExplorer->moveFile($fileId, $validated['new_directory_id']);
+
+        if ($request->wantsJson()) {
+            return response()->json(null, 200);
+        }
+
+        return back()->with('success', 'File moved successfully');
+    }
+
+    public function renameDirectory(Request $request, int $directoryId)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $this->fileExplorer->renameDirectory($directoryId, $validated['name']);
+
+        if ($request->wantsJson()) {
+            return response()->json(null, 200);
+        }
+
+        return back()->with('success', 'Directory renamed successfully');
+    }
+
+    public function renameFile(Request $request, int $fileId)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $this->fileExplorer->renameFile($fileId, $validated['name']);
+
+        if ($request->wantsJson()) {
+            return response()->json(null, 200);
+        }
+
+        return back()->with('success', 'File renamed successfully');
+    }
+
+    public function getDirectoryPath(int $directoryId): JsonResponse
+    {
+        return response()->json(
+            $this->fileExplorer->getDirectoryPath($directoryId)
+        );
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'query' => 'required|string|min:2',
+            'directory_id' => 'nullable|exists:directories,id'
+        ]);
+
+        $directory = $validated['directory_id'] ? Directory::find($validated['directory_id']) : null;
+        $results = $this->fileExplorer->searchFiles($validated['query'], $directory);
+
+        return response()->json($results);
+    }
+
+    public function getDirectoryTree(): JsonResponse
+    {
+        return response()->json(
+            $this->fileExplorer->getDirectoryTree()
+        );
+    }
+
+    public function reorderDirectory(Request $request, Directory $directory)
+    {
+        $validated = $request->validate([
+            'position' => 'required|integer|min:0'
+        ]);
+
+        $this->fileExplorer->reorderDirectory($directory, $validated['position']);
+
+        if ($request->wantsJson()) {
+            return response()->json(null, 200);
+        }
+
+        return back()->with('success', 'Directory reordered successfully');
     }
 } 
