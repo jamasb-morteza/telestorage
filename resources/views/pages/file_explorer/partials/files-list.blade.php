@@ -1,3 +1,4 @@
+<div class="dark:bg-gray-800">
 
 <div class="files-container table-responsive">
     <table class="min-w-full divide-y divide-gray-200">
@@ -8,4 +9,5 @@
             @endforeach
         </tbody>
     </table>
+</div>
 </div>

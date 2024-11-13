@@ -1,6 +1,6 @@
 @foreach($directoryTree as $directory)
     <li class="directory-item">
-        <div class="flex items-center gap-1 py-1 hover:bg-gray-100 rounded cursor-pointer" 
+        <div class="flex items-center gap-1 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer text-gray-900 dark:text-gray-300" 
              onclick="toggleDirectory(this)"
              x-data="{ expanded: {{ $directory->name === 'Root' ? 'true' : 'false' }} }"
              x-bind:class="{ 'expanded': expanded }"
@@ -8,9 +8,9 @@
              hx-target="#directory-content"
              hx-trigger="click">
             <div class="flex items-center">
-                <x-heroicon-o-chevron-down class="w-3 h-3 text-gray-400 transition-transform duration-300" 
+                <x-heroicon-o-chevron-down class="w-3 h-3 text-gray-400 dark:text-gray-500 transition-transform duration-300" 
                     x-bind:class="{ 'rotate-[-90deg]': !expanded }" />
-                <x-heroicon-o-folder class="w-4 h-4 text-gray-400 ml-1" />
+                <x-heroicon-o-folder class="w-4 h-4 text-gray-400 dark:text-gray-500 ml-1" />
             </div>
             <span>{{ $directory->name }}</span>
         </div>
@@ -20,8 +20,8 @@
                 @include('pages.file_explorer.partials.directory-items', ['directoryTree' => $directory->children])
                 @foreach($directory->files as $file)
                     <li class="file-item">
-                        <div class="flex items-center gap-1 py-1 hover:bg-gray-100 rounded cursor-pointer">
-                            <x-heroicon-o-document class="w-4 h-4 text-gray-400 ml-4" />
+                        <div class="flex items-center gap-1 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer text-gray-900 dark:text-gray-300">
+                            <x-heroicon-o-document class="w-4 h-4 text-gray-400 dark:text-gray-500 ml-4" />
                             <span>{{ $file->name }}</span>
                         </div>
                     </li>
