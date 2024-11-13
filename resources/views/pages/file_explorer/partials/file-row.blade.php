@@ -1,15 +1,24 @@
-<tr class="hover:bg-gray-50 cursor-pointer" data-path="{{ $directoryContent->path }}">
+<tr class="hover:bg-gray-50 cursor-pointer" 
+    data-path="{{ $directoryContent->path }}"
+    @if($directoryContent->type === 'directory')
+    hx-get="{{ route('file-explorer.directory.content', ['directoryId' => $directoryContent->id]) }}"
+    hx-target="#directory-content"
+    hx-trigger="click"
+    @endif
+>
     {{-- Icon + Name Column --}}
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="flex items-center">
             <div class="flex-shrink-0 w-5 h-5">
                 @if($directoryContent->type === 'directory')
-                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                    </svg>
+                    <div>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                        </svg>
+                    </div>
                 @else
-                    <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                 @endif
             </div>
@@ -52,4 +61,4 @@
             </button>
         </div>
     </td>
-</tr> 
+</tr>
