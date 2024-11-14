@@ -25,8 +25,10 @@
     <!-- Page Heading -->
     @isset($header)
         <header class="bg-white dark:bg-gray-800 shadow">
-            <div class="max-w mx-auto py-4 px-2 sm:px-6 lg:px-8">
-                {{ $header }}
+            <div class="max-w mx-auto py-2 px-2 sm:px-6 lg:px-8">
+                <div class="flex justify-start">
+                    {{ $header }}
+                </div>
             </div>
         </header>
     @endisset

@@ -22,20 +22,22 @@
                 </div>
             </div>
 
-            <div>
 
+            <div class="flex justify-start">
+                <div class="py-3">
+                    @include('layouts.top_navigation.partials.toggle-mode')
+                </div>
+                <div class="hidden sm:flex sm:items-center sm:ms-2">
+                    <!-- Theme Toggle -->
+                    @include('layouts.top_navigation.partials.settings-dropdown')
+                </div>
+                <!-- Hamburger -->
+                <div class="-me-2 flex items-center sm:hidden">
+                    @include('layouts.top_navigation.partials.burger-menu-handler')
+                </div>
             </div>
-
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <!-- Theme Toggle -->
-                @include('layouts.top_navigation.partials.settings-dropdown')
-            </div>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                @include('layouts.top_navigation.partials.burger-menu-handler')
-            </div>
         </div>
     </div>
 
