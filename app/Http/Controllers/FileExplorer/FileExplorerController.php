@@ -8,6 +8,7 @@ use App\Models\Directory;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+
 class FileExplorerController extends Controller
 {
     protected FileExplorerService $fileExplorer;
@@ -36,19 +37,19 @@ class FileExplorerController extends Controller
             'breadcrumb' => $breadcrumb,
             'currentDirectory' => null
         ];
-        
-        return view('pages.file_explorer.master', $viewData);
+
+        return view('pages.file-explorer.master', $viewData);
     }
 
-    public function getDirectoryContents(int $directoryId): JsonResponse|View
+    public function getDirectoryContents(Request $request, int $directoryId): JsonResponse|View
     {
         $directoryContents = $this->fileExplorer->getDirectoryContents($directoryId);
         $directoryContents = $directoryContents['directories']->merge($directoryContents['files']);
-        if (request()->wantsJson()) {   
+        if (request()->wantsJson()) {
             return response()->json($directoryContents);
         }
 
-        return view('pages.file_explorer.partials.files-list', ['directoryContents' => $directoryContents]);
+        return view('pages.file-explorer.partials.files-table.files-table', ['directoryContents' => $directoryContents]);
     }
 
     public function createDirectory(Request $request)
@@ -128,10 +129,10 @@ class FileExplorerController extends Controller
     public function moveFile(Request $request, int $fileId)
     {
         $validated = $request->validate([
-            'new_directory_id' => 'required|exists:directories,id'
+            'target_uuid' => 'required|exists:directories,id'
         ]);
 
-        $this->fileExplorer->moveFile($fileId, $validated['new_directory_id']);
+        $this->fileExplorer->moveFile($fileId, $validated['target_uuid']);
 
         if ($request->wantsJson()) {
             return response()->json(null, 200);
@@ -211,4 +212,4 @@ class FileExplorerController extends Controller
 
         return back()->with('success', 'Directory reordered successfully');
     }
-} 
+}

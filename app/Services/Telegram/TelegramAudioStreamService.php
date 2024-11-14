@@ -2,13 +2,14 @@
 
 namespace App\Services\Telegram;
 
+use danog\MadelineProto\EventHandler;
 use Illuminate\Support\Facades\Log;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Mp3;
 use FFMpeg\Format\Audio\Aac;
 use FFMpeg\Format\Audio\Opus;
 
-class TelegramAudioStreamService extends BaseTelegramService
+class TelegramAudioStreamService extends EventHandler
 {
     private FFMpeg $ffmpeg;
     

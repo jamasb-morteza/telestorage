@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileExplorer\FileExplorerController;
+use App\Http\Controllers\Telegram\TelegramAuthController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -10,7 +12,7 @@ Route::get('/', function () {
 
 // Group for file explorer routes
 Route::group(['prefix' => 'file-explorer', 'middleware' => ['auth']], function () {
-    
+
     Route::get('/', [FileExplorerController::class, 'index'])->name('file-explorer.index');
     Route::get('directory/{directoryId}/contents', [FileExplorerController::class, 'getDirectoryContents'])->name('file-explorer.directory.content');
     Route::post('directory', [FileExplorerController::class, 'createDirectory'])->name('file-explorer.directory.create');
@@ -29,7 +31,7 @@ Route::group(['prefix' => 'file-explorer', 'middleware' => ['auth']], function (
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('pages.dashboard.master');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -38,4 +40,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::prefix('telegram')->name('telegram.')->group(function () {
+    // QR Code Authentication
+    Route::get('/qr-login', [TelegramAuthController::class, 'generateQrCode'])->name('qr-login');
+    Route::get('/qr-status', [TelegramAuthController::class, 'checkQrStatus'])->name('qr-status');
+
+    // Phone Authentication
+    Route::post('/phone-login', [TelegramAuthController::class, 'phoneLogin'])->name('phone-login');
+    Route::post('/verify-code', [TelegramAuthController::class, 'verifyCode'])->name('verify-code');
+
+    // Password Authentication (2FA if enabled)
+    Route::post('/verify-password', [TelegramAuthController::class, 'verifyPassword'])->name('verify-password');
+
+    // Session Management
+    Route::post('/logout', [TelegramAuthController::class, 'logout'])->name('logout');
+    Route::get('/status', [TelegramAuthController::class, 'checkAuthStatus'])->name('status');
+});
+
+require __DIR__ . '/auth.php';

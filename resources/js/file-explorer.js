@@ -1,4 +1,16 @@
+
 document.addEventListener('DOMContentLoaded', function() {
+
+    window.selectAllFiles = function(checkbox_element) {  
+        const table = checkbox_element.closest('table');
+        const checkboxes = table.querySelectorAll('input.select-file-checkbox[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = checkbox_element.checked;
+        });
+    };
+
+    
+
     window.toggleDirectory = function(element) {
         // Get the Alpine.js component instance
         const alpineComponent = Alpine.$data(element);
