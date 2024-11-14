@@ -16,7 +16,7 @@
             crossorigin="anonymous"></script>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/file-explorer.js'])
 </head>
 <body class="font-sans antialiased" hx-boost="true">
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -26,7 +26,7 @@
     @isset($header)
         <header class="bg-white dark:bg-gray-800 shadow">
             <div class="max-w mx-auto py-2 px-2 sm:px-6 lg:px-8">
-                <div class="flex justify-start">
+                <div class="flex justify-start text-gray-800 dark:text-gray-200">
                     {{ $header }}
                 </div>
             </div>
