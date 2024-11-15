@@ -6,6 +6,7 @@ use danog\MadelineProto\API;
 use danog\MadelineProto\Exception;
 use Illuminate\Support\Facades\Log;
 use MadelinePlugin\Danogentili\PingPlugin;
+use danog\MadelineProto\SettingsLogger;
 
 class TelegramSessionService
 {
@@ -14,7 +15,11 @@ class TelegramSessionService
     public function __construct(string $session = 'session.madeline')
     {
         try {
-            $this->madelineProto = new API($session);
+            $settings = (new \danog\MadelineProto\Settings\AppInfo)
+                ->setApiId(config('services.telegram.api_id'))
+                ->setApiHash(config('services.telegram.api_hash'));
+
+            $this->madelineProto = new API($session, $settings);
         } catch (Exception $e) {
             Log::error('[Telegram] Failed to construct TelegramSession: ' . $e->getMessage());
             throw $e;
