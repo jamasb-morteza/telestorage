@@ -1,20 +1,26 @@
-<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-move dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
     data-path="{{ $directoryContent->path }}"
     data-content-type="{{ $directoryContent->type }}"
     data-content-uuid="{{ $directoryContent->uuid }}"
 >
-
     <td class="w-12 px-6 py-4">
-        <x-heroicon-c-arrow-path/>
-        path
-        <input type="checkbox"
-               class="select-file-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-               aria-label="Select file">
+        <div class="flex justify-start items-center space-x-2">
+            <div class="move-handle w-5 h-5 cursor-move">
+                <x-heroicon-s-arrows-pointing-out/>
+            </div>
+
+            <div>
+                <input type="checkbox"
+                       class="select-file-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+                       aria-label="Select file">
+            </div>
+
+        </div>
     </td>
 
     {{-- Icon + Name Column --}}
     <td class="px-6 py-4 whitespace-nowrap">
-        <div class="flex items-center file-name-column"
+        <div class="flex items-center file-name-column cursor-pointer"
              @if($directoryContent->type === 'directory')
                  hx-get="{{ route('file-explorer.directory.content', ['directoryId' => $directoryContent->id]) }}"
              hx-target="#directory-content"
