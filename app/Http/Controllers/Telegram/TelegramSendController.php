@@ -17,7 +17,7 @@ class TelegramSendController extends Controller
         $this->telegramService = $telegramService;
     }
 
-    public async function sendMessage(Request $request): JsonResponse
+    public  function sendMessage(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'peer_id' => 'required|string',
@@ -32,7 +32,7 @@ class TelegramSendController extends Controller
         }
 
         try {
-            $result = await $this->telegramService->sendMessage(
+            $result =  $this->telegramService->sendMessage(
                 $request->input('peer_id'),
                 $request->input('message')
             );
@@ -49,7 +49,7 @@ class TelegramSendController extends Controller
         }
     }
 
-    public async function sendImage(Request $request): JsonResponse
+    public  function sendImage(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'peer_id' => 'required|string',
@@ -83,7 +83,7 @@ class TelegramSendController extends Controller
         }
     }
 
-    public async function sendVideo(Request $request): JsonResponse
+    public  function sendVideo(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'peer_id' => 'required|string',
@@ -117,7 +117,7 @@ class TelegramSendController extends Controller
         }
     }
 
-    public async function sendVoiceMessage(Request $request): JsonResponse
+    public  function sendVoiceMessage(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'peer_id' => 'required|string',
@@ -148,4 +148,4 @@ class TelegramSendController extends Controller
             ], 500);
         }
     }
-} 
+}

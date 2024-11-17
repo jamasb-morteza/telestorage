@@ -25,6 +25,7 @@ class TelegramAuthController extends Controller
     {
         try {
             $qrCode = $this->telegramService->startQRLogin();
+
             return response()->json(['qrCode' => $qrCode]);
         } catch (Exception $e) {
             Log::error('[Telegram] QR code generation failed: ' . $e->getMessage());
