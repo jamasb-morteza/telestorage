@@ -5,7 +5,8 @@ namespace App\Services\Telegram;
 use danog\MadelineProto\API;
 use danog\MadelineProto\Exception;
 use danog\MadelineProto\Settings;
-use danog\MadelineProto\Settings\Logger;
+use danog\MadelineProto\Logger;
+use danog\MadelineProto\Settings\Logger as SettingsLogger;
 use Illuminate\Support\Facades\Log;
 
 
@@ -19,7 +20,10 @@ class TelegramSessionService
             $app_info = (new \danog\MadelineProto\Settings\AppInfo)
                 ->setApiId(config('services.telegram.api_id'))
                 ->setApiHash(config('services.telegram.api_hash'));
-            $logger = new Logger();
+            $logger = (new SettingsLogger)
+                ->setType(Logger::FILE_LOGGER)
+                ->setExtra('madeline_proto_custom.log')
+                ->setMaxSize(50 * 1024 * 1024);
             $settings = new Settings();
             $settings->setAppInfo($app_info);
             $settings->setLogger($logger);
