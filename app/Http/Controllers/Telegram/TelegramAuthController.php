@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use danog\MadelineProto\API;
 
 class TelegramAuthController extends Controller
 {
@@ -24,9 +25,9 @@ class TelegramAuthController extends Controller
     public function generateQrCode(): JsonResponse
     {
         try {
-            $qrCode = $this->telegramService->startQRLogin();
+            $qrCode = $this->telegramService->get();
 
-            return response()->json(['qrCode' => $qrCode]);
+            return response()->json(['aaqrCode' => $qrCode]);
         } catch (Exception $e) {
             Log::error('[Telegram] QR code generation failed: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to generate QR code'], 500);
@@ -88,7 +89,7 @@ class TelegramAuthController extends Controller
             $code = $request->input('code');
             $phoneCodeHash = session('phone_code_hash');
 
-            $result = $this->telegramService->completePhoneLogin(
+            $result = $this->telegramService->verifyCode(
                 $phone,
                 $code,
                 $phoneCodeHash

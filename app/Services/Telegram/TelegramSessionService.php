@@ -2,137 +2,124 @@
 
 namespace App\Services\Telegram;
 
-use danog\MadelineProto\API;
+use Amp\CancelledException;
+use Amp\TimeoutCancellation;
+use danog\MadelineProto\API as MadelineAPI;
 use danog\MadelineProto\Exception;
 use danog\MadelineProto\Settings;
-use danog\MadelineProto\Logger;
-use danog\MadelineProto\Settings\Logger as SettingsLogger;
+use danog\MadelineProto\Settings\AppInfo;
 use Illuminate\Support\Facades\Log;
+use function PHPUnit\Framework\throwException;
 
 
 class TelegramSessionService
 {
-    private API $madelineProto;
+    private MadelineAPI $madelineProtoAPI;
+    private string $telegram_session;
 
     public function __construct(string $session = 'session.madeline')
     {
+        $this->telegram_session = $session;
         try {
-            $app_info = (new \danog\MadelineProto\Settings\AppInfo)
+            $app_info = (new AppInfo)
                 ->setApiId(config('services.telegram.api_id'))
                 ->setApiHash(config('services.telegram.api_hash'));
-            $logger = (new SettingsLogger)
-                ->setType(Logger::FILE_LOGGER)
-                ->setExtra('madeline_proto_custom.log')
-                ->setMaxSize(50 * 1024 * 1024);
+
             $settings = new Settings();
+
             $settings->setAppInfo($app_info);
-            $settings->setLogger($logger);
-            $this->madelineProto = new API($session, $settings);
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to construct TelegramSession: ' . $e->getMessage());
-            throw $e;
-        }
-        $this->madelineProto->start();
-    }
-
-    /**
-     * Send verification code to phone number
-     */
-    public function sendCode(string $phoneNumber): array
-    {
-        try {
-            return $this->madelineProto->phoneLogin($phoneNumber);
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to send code: ' . $e->getMessage());
-            throw $e;
+            $this->madelineProtoAPI = new MadelineAPI($this->telegram_session, $settings);
+        } catch (Exception $exception) {
+            Log::error('[Telegram] Failed to construct TelegramSession', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
+            throwException($exception);
         }
     }
 
-    /**
-     * Complete phone login process
-     */
-    public function completePhoneLogin(string $phone, string $code, string $phoneCodeHash): array
+    public function loginWithPhone(string $phone_number): array
     {
+
+        // Send OTP
         try {
-            return $this->madelineProto->completePhoneLogin($code, $phoneCodeHash);
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to complete phone login: ' . $e->getMessage());
-            throw $e;
+            $this->madelineProtoAPI->phoneLogin($phone_number);
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Fail to send otp', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
+            throwException($exception);
         }
+        Log::info('[Telegram] OTP sent successfully', ['session' => $this->telegram_session]);
+        return ['success' => true, 'message' => 'OTP sent to your phone.'];
     }
 
-    /**
-     * Complete 2FA login with password
-     */
-    public function complete2FALogin(string $password): array
+    public function verifyCode(string $otp_code): array
     {
+
         try {
-            return $this->madelineProto->complete2faLogin($password);
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to complete 2FA: ' . $e->getMessage());
-            throw $e;
+            $this->madelineProtoAPI->completePhoneLogin($otp_code);
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Failed to complete login', ['exception' => $exception->getMessage()]);
+            throwException($exception);
         }
+        Log::info('[Telegram] Logged in successfully', ['session' => $this->telegram_session]);
+        // Verify OTP
+        return ['success' => true, 'message' => 'Logged in successfully.'];
     }
 
-    /**
-     * Start QR code login process
-     */
-    public function startQRLogin(): ?string
+    public function generateQrCode(null|float $wait_qr_login = null): array
     {
+        // Generate a QR code for Telegram session login
+        $qr_code = null;
         try {
-
-            $qrLogin = $this->madelineProto->qrLogin();
-            return $qrLogin?->token ?? null;
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to generate QR code: ' . $e->getMessage());
-            throw $e;
+            $qr_code = $this->madelineProtoAPI->qrLogin();
+            if ($wait_qr_login) {
+                $qr_code = $qr_code?->waitForLoginOrQrCodeExpiration(new TimeoutCancellation(5.0));
+            }
+        } catch (CancelledException) {
+            $qr_code = $this->madelineProtoAPI->qrLogin();
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] QR Login failed', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
+            throwException($exception);
         }
-    }
 
-    /**
-     * Check QR code login status
-     */
-    public function checkQrStatus(): array
-    {
-        try {
-            return $this->madelineProto->checkQrLogin();
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to check QR login status: ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    /**
-     * Get current authentication status
-     */
-    public function getAuthStatus(): array
-    {
-        try {
-            $self = $this->madelineProto->getSelf();
+        if ($qr_code) {
             return [
-                'logged_in' => $self !== null,
-                'user' => $self
-            ];
-        } catch (Exception $e) {
-            return [
+                'success' => true,
                 'logged_in' => false,
-                'error' => $e->getMessage()
+                'svg' => $qr_code->getQRSvg(400, 2)
             ];
         }
+        return [
+            'logged_in' => true,
+            'needs_2fa' => $this->madelineProtoAPI->getAuthorization() === MadelineAPI::WAITING_PASSWORD
+        ];
     }
 
-    /**
-     * Logout from current session
-     */
-    public function logout(): bool
+    public function getSessionStatus(): array
     {
+        $result = [
+            'success' => true,
+            'logged_in' => false,
+            'status_text' => null,
+            'status_code' => null
+        ];
         try {
-            $this->madelineProto->logout();
-            return true;
-        } catch (Exception $e) {
-            Log::error('[Telegram] Failed to logout: ' . $e->getMessage());
-            throw $e;
+            $status = $this->madelineProtoAPI->getAuthorization();
+            $result['status_code'] = $status;
+            $result['logged_in'] = $status === MadelineAPI::LOGGED_IN;
+            $result['status_text'] = match ($status) {
+                MadelineAPI::NOT_LOGGED_IN => 'Not Logged in',
+                MadelineAPI::WAITING_CODE => 'Waiting for Code',
+                MadelineAPI::WAITING_SIGNUP => 'Waiting for signup',
+                MadelineAPI::WAITING_PASSWORD => 'Waiting for password',
+                MadelineAPI::LOGGED_IN => 'Logged in',
+                MadelineAPI::LOGGED_OUT => 'Logged out',
+            };
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Failed to get authorization status', [
+                'session' => $this->telegram_session,
+                'exception' => $exception->getMessage()
+            ]);
+            throwException($exception);
         }
+        return $result;
     }
 }
 
