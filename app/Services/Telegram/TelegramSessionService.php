@@ -16,6 +16,7 @@ class TelegramSessionService
 {
     private MadelineAPI $madelineProtoAPI;
     private string $telegram_session;
+    protected $sessionAPI = null;
 
     public function __construct(string $session = 'session.madeline')
     {
@@ -24,10 +25,14 @@ class TelegramSessionService
             $app_info = (new AppInfo)
                 ->setApiId(config('services.telegram.api_id'))
                 ->setApiHash(config('services.telegram.api_hash'));
-
+            $session_db_settings = (new Settings\Database\Mysql())
+                ->setUri('tcp://' . config('database.connections.mariadb'))
+                ->setUsername('root')
+                ->setPassword('');
             $settings = new Settings();
 
             $settings->setAppInfo($app_info);
+            $settings->setDb($session_db_settings);
             $this->madelineProtoAPI = new MadelineAPI($this->telegram_session, $settings);
         } catch (Exception $exception) {
             Log::error('[Telegram] Failed to construct TelegramSession', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
@@ -121,5 +126,14 @@ class TelegramSessionService
         }
         return $result;
     }
+
+
+    public static function getSessionStatusFromSession(string $session): array
+    {
+        $telegramSessionService = new TelegramSessionService($session);
+        return $telegramSessionService->getSessionStatus();
+    }
+
+
 }
 
