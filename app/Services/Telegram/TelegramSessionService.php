@@ -15,27 +15,31 @@ use function PHPUnit\Framework\throwException;
 class TelegramSessionService
 {
     private MadelineAPI $madelineProtoAPI;
-    private string $telegram_session;
-    protected $sessionAPI = null;
+    private string $telegram_session_name;
+    protected static self|null $madelineProtoAPIInstance = null;
 
     public function __construct(string $session = 'session.madeline')
     {
-        $this->telegram_session = $session;
+        $this->telegram_session_name = $session;
         try {
             $app_info = (new AppInfo)
                 ->setApiId(config('services.telegram.api_id'))
                 ->setApiHash(config('services.telegram.api_hash'));
-            $session_db_settings = (new Settings\Database\Mysql())
-                ->setUri('tcp://' . config('database.connections.mariadb'))
-                ->setUsername('root')
-                ->setPassword('');
+
             $settings = new Settings();
 
             $settings->setAppInfo($app_info);
+            $session_db_settings = (new Settings\Database\Mysql())
+                ->setUri('tcp://' . config('database.connections.mariadb_sessions.host'))
+                ->setDatabase(config('database.connections.mariadb_sessions.database'))
+                ->setUsername(config('database.connections.mariadb_sessions.username'))
+                ->setPassword(config('database.connections.mariadb_sessions.password'));
+
             $settings->setDb($session_db_settings);
-            $this->madelineProtoAPI = new MadelineAPI($this->telegram_session, $settings);
+            $this->madelineProtoAPI = new MadelineAPI($this->telegram_session_name, $settings);
+
         } catch (Exception $exception) {
-            Log::error('[Telegram] Failed to construct TelegramSession', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
+            Log::error('[Telegram] Failed to construct TelegramSession', ['session' => $this->telegram_session_name, 'exception' => $exception->getMessage()]);
             throwException($exception);
         }
     }
@@ -47,10 +51,10 @@ class TelegramSessionService
         try {
             $this->madelineProtoAPI->phoneLogin($phone_number);
         } catch (\Exception $exception) {
-            Log::error('[Telegram] Fail to send otp', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
+            Log::error('[Telegram] Fail to send otp', ['session' => $this->telegram_session_name, 'exception' => $exception->getMessage()]);
             throwException($exception);
         }
-        Log::info('[Telegram] OTP sent successfully', ['session' => $this->telegram_session]);
+        Log::info('[Telegram] OTP sent successfully', ['session' => $this->telegram_session_name]);
         return ['success' => true, 'message' => 'OTP sent to your phone.'];
     }
 
@@ -59,11 +63,12 @@ class TelegramSessionService
 
         try {
             $this->madelineProtoAPI->completePhoneLogin($otp_code);
+            $this->madelineProtoAPI = new MadelineAPI($this->telegram_session_name);
         } catch (\Exception $exception) {
             Log::error('[Telegram] Failed to complete login', ['exception' => $exception->getMessage()]);
             throwException($exception);
         }
-        Log::info('[Telegram] Logged in successfully', ['session' => $this->telegram_session]);
+        Log::info('[Telegram] Logged in successfully', ['session' => $this->telegram_session_name]);
         // Verify OTP
         return ['success' => true, 'message' => 'Logged in successfully.'];
     }
@@ -80,7 +85,7 @@ class TelegramSessionService
         } catch (CancelledException) {
             $qr_code = $this->madelineProtoAPI->qrLogin();
         } catch (\Exception $exception) {
-            Log::error('[Telegram] QR Login failed', ['session' => $this->telegram_session, 'exception' => $exception->getMessage()]);
+            Log::error('[Telegram] QR Login failed', ['session' => $this->telegram_session_name, 'exception' => $exception->getMessage()]);
             throwException($exception);
         }
 
@@ -119,7 +124,7 @@ class TelegramSessionService
             };
         } catch (\Exception $exception) {
             Log::error('[Telegram] Failed to get authorization status', [
-                'session' => $this->telegram_session,
+                'session' => $this->telegram_session_name,
                 'exception' => $exception->getMessage()
             ]);
             throwException($exception);
@@ -127,13 +132,38 @@ class TelegramSessionService
         return $result;
     }
 
-
-    public static function getSessionStatusFromSession(string $session): array
+    public function sessionInfo()
     {
-        $telegramSessionService = new TelegramSessionService($session);
-        return $telegramSessionService->getSessionStatus();
+        $full_self = $this->madelineProtoAPI->getSelf();
+        return $full_self;
     }
 
+    public function logout()
+    {
 
+        try {
+            $this->madelineProtoAPI->logout();
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Error logging out ', [
+                'session' => $this->telegram_session_name,
+                'exception' => $exception->getMessage()
+            ]);
+            throwException($exception);
+        }
+        return ['success' => true];
+    }
+
+    public function getMadelineAPI(): MadelineAPI
+    {
+        return $this->madelineProtoAPI;
+    }
+
+    public static function getInstance($session_name)
+    {
+        if (!self::$madelineProtoAPIInstance) {
+            self::$madelineProtoAPIInstance = new self($session_name);
+        }
+        return self::$madelineProtoAPIInstance;
+    }
 }
 

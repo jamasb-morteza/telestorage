@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Telegram;
 
+use App\Services\Telegram\TelegramSessionService;
 use Illuminate\Console\Command;
 
 class TelegramGetSessionStatusCommand extends Command
@@ -11,7 +12,7 @@ class TelegramGetSessionStatusCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'telegram:get-session-status-command {--session_name}';
+    protected $signature = 'telegram:session-status {--session_name}';
 
     /**
      * The console command description.
@@ -20,11 +21,16 @@ class TelegramGetSessionStatusCommand extends Command
      */
     protected $description = '[Telegram] Get Session Status';
 
+    protected $telegram_service = null;
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
         //
+        $session_name = $this->argument('session_name');
+        $this->telegram_service = TelegramSessionService::getInstance($session_name);
+        $this->telegram_service->getSessionStatus();
     }
 }
