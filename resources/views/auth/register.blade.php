@@ -13,7 +13,7 @@
 
         <!-- Mobile Number -->
         <div class="mt-4">
-            <x-input-label for="mobile_number" :value="__('Mobile Number (International Format)')"/>
+            <x-input-label for="mobile_number" :value="__('Mobile Number')"/>
             <div class="flex">
 
                 <x-text-input id="mobile_number" class="block mt-1 w-full rounded-l-none" type="tel"
