@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Telegram;
 
-use App\Services\Telegram\TelegramSessionService;
+use App\Services\Telegram\API\TelegramSessionService;
 use Illuminate\Console\Command;
 
 class TelegramGetSessionStatusCommand extends Command

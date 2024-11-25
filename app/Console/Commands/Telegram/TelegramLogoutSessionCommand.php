@@ -2,14 +2,7 @@
 
 namespace App\Console\Commands\Telegram;
 
-use App\Services\Telegram\TelegramSessionService;
-use danog\MadelineProto\API;
-use danog\MadelineProto\Settings;
 use Illuminate\Console\Command;
-
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\info;
-use function Laravel\Prompts\text;
 
 class TelegramLogoutSessionCommand extends Command
 {
@@ -31,13 +24,13 @@ class TelegramLogoutSessionCommand extends Command
      * Execute the console command.
      */
 
-    protected TelegramSessionService|null $telegram_service = null;
+    protected \App\Services\Telegram\API\TelegramSessionService|null $telegram_service = null;
 
     public function handle()
     {
         //
         $session_name = $this->argument('session_name');
-        $this->telegram_service = TelegramSessionService::getInstance($session_name);
+        $this->telegram_service = \App\Services\Telegram\API\TelegramSessionService::getInstance($session_name);
         $this->logout();
 
     }

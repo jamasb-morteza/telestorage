@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileExplorer\FileExplorerController;
-use App\Http\Controllers\Telegram\TelegramAuthController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Telegram\TelegramAPI\TelegramAuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');

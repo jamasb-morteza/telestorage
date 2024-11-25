@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands\Telegram;
 
-use App\Services\Telegram\TelegramSessionService;
-use danog\MadelineProto\API;
-use danog\MadelineProto\Settings;
+use App\Services\Telegram\API\TelegramSessionService;
 use Illuminate\Console\Command;
-
-use function Laravel\Prompts\select;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\text;
 
@@ -31,7 +27,7 @@ class TelegramCreateSessionCommand extends Command
      * Execute the console command.
      */
 
-    protected TelegramSessionService|null $telegram_service = null;
+    protected \App\Services\Telegram\API\TelegramSessionService|null $telegram_service = null;
 
     public function handle()
     {

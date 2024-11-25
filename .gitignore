@@ -20,6 +20,7 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+database/telestorage
 
 **/caddy
 frankenphp

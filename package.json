@@ -17,6 +17,11 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "daisyui": "^4.12.14"
+        "daisyui": "^4.12.14",
+        "flowbite": "^2.5.2",
+        "inputmask": "^5.0.9",
+        "jquery": "^3.7.1",
+        "jquery-validation": "^1.21.0",
+        "yup": "^1.4.0"
     }
 }
