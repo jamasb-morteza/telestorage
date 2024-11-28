@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands\Telegram;
 
-use App\Services\Telegram\API\TelegramSessionService;
 use App\Services\Telegram\Bot\TelegramBotSessionService;
 use Illuminate\Console\Command;
-use function Laravel\Prompts\info;
-use function Laravel\Prompts\text;
+
 use function Laravel\Prompts\outro;
 
 class TelegramBotClientsList extends Command
@@ -35,9 +33,13 @@ class TelegramBotClientsList extends Command
     {
         //
         $madelineProto = app(TelegramBotSessionService::class)->getMadelineAPI();
-        outro("Client list:");
-        $dialogs = $madelineProto->getSelf();
-        dd($dialogs);
+        $dialog_ids = $madelineProto->getDialogIds();
+        dump($dialog_ids);
+        // Process and display the chats
+        foreach ($dialog_ids as $dialog_id) {
+
+            dump($madelineProto->getInfo($dialog_id));
+        }
     }
 
 

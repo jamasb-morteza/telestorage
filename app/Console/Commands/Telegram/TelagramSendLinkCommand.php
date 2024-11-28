@@ -12,7 +12,7 @@ class SendLinkCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'telegram:link-send {mobile_number}';
+    protected $signature = 'telegram:link-send';
 
     /**
      * The console command description.
@@ -31,8 +31,13 @@ class SendLinkCommand extends Command
         $madelineProto = app(TelegramBotSessionService::class)->getMadelineAPI();
         $user_uuid = uniqid(); // Generate a unique user UUID
         $verification_code = rand(100000, 999999); // Generate a random 6-digit verification code
-        $madelineProto->sendMessage($mobile_number, "Your verification code is: {$verification_code}");
 
+        $contacts = $madelineProto->contacts->importContacts(['contacts' => ['phone' => $mobile_number]]);
+
+        foreach ($chats as $chat) {
+            dump($chat);
+        }
+//        $madelineProto->sendMessage('353112509', "Your verification code is: {$verification_code}");
 
 
         // todo
