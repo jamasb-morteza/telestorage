@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             'name' => env('SUPERADMIN_USERNAME'),
             'email' => 'jamaseb.morteza@gmail.com',
             'username' => 'm.jamasb',
-            'ulid' => Str::orderedUuid(),
+            'ulid' => Str::orderedUuid()->toString(),
             'password' => env('SUPERADMIN_PASSWORD'),
         ]);
         // First create directories
