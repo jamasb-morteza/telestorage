@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
-        $this->app->singleton(TelegramBotSessionService::class, function ($app) {
+        $this->app->singleton('telegram_bot', function ($app) {
             return new TelegramBotSessionService();
         });
     }

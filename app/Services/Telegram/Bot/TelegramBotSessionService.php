@@ -4,6 +4,8 @@ namespace App\Services\Telegram\Bot;
 
 use Amp\CancelledException;
 use Amp\TimeoutCancellation;
+use App\Models\User;
+use Carbon\Carbon;
 use danog\MadelineProto\API as MadelineAPI;
 use danog\MadelineProto\Exception;
 use danog\MadelineProto\Settings;
@@ -46,6 +48,9 @@ class TelegramBotSessionService
     }
 
 
-
+    public function generateLink(User $user, int|null $expired_for = null): string
+    {
+        return \Hash::make($user->id . Carbon::now()->toString());
+    }
 }
 

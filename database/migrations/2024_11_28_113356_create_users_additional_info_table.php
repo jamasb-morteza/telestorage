@@ -12,6 +12,8 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->json('user_info')->after('password')->nullable();
+            $table->string('bot_verification_token')->after('user_info')->nullable()->index();
+            $table->dateTime('bot_verification_token_expire_at')->after('bot_verification_token')->nullable()->index();
         });
 
         Schema::create('users_additional_info', function (Blueprint $table) {
