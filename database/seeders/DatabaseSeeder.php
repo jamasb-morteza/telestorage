@@ -8,6 +8,7 @@ use App\Models\File;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,9 +18,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'email' => 'jamaseb.morteza@gmail.com',
-            'mobile_number' => '',
             'name' => env('SUPERADMIN_USERNAME'),
+            'email' => 'jamaseb.morteza@gmail.com',
+            'username' => 'm.jamasb',
+            'ulid' => Str::orderedUuid(),
             'password' => env('SUPERADMIN_PASSWORD'),
         ]);
         // First create directories

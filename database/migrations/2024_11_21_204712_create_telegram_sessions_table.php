@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('telegram_sessions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained(
-                table: 'users', indexName: 'telegram_sessions_user_id_foreign'
+                table: 'users', column: 'id', indexName: 'telegram_sessions_user_id_foreign'
             );
             $table->string('session_name')->index();
             $table->string('mobile_number')->index();
