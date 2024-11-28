@@ -23,6 +23,9 @@ class User extends Authenticatable
         'ulid',
         'email',
         'password',
+        'user_info',
+        'bot_verification_token',
+        'bot_verification_token_expire_at',
     ];
 
     /**

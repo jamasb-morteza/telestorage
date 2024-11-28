@@ -497,3 +497,11 @@ MTProto:        	Prompting final serialization (SHUTDOWN)...
 MTProto:        	Done final serialization (SHUTDOWN)!
 Connection:     	Connecting to DC 2.0 via tcp://149.154.167.51:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream
 AbstractServer: 	Accepted IPC client connection!
+Logger:         	MadelineProto 8.3.5
+Logger:         	Copyright (C) 2016-2024 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Logger:         	MadelineProto 8.3.5
+Logger:         	Copyright (C) 2016-2024 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto

@@ -16,14 +16,12 @@
 
         <!-- Mobile Number -->
         <div class="mt-4">
-            <x-input-label for="mobile_number" :value="__('Mobile Number')"/>
+            <x-input-label for="username" :value="__('Username')"/>
             <div class="flex">
-                <x-text-input id="mobile_number" class="block mt-1 w-full rounded-l-none" type="tel"
-                              name="mobile_number" :value="old('mobile_number')" autocomplete="tel"
-                              data-mask="+9[9][9] 999 999 9999"
-                              pattern="^\d{1,4} \d{3} \d{4}$" title="Format: 938 220 8977"/>
+                <x-text-input id="username" class="block mt-1 w-full rounded-l-none"
+                              name="username" :value="old('username')" autocomplete="username" title="{{__('Username')}}"/>
             </div>
-            <x-input-error :messages="$errors->get('mobile_number')" class="mt-2"/>
+            <x-input-error :messages="$errors->get('username')" class="mt-2"/>
         </div>
         <!-- Password -->
         <div class="mt-4">
