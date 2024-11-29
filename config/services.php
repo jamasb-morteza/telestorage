@@ -40,5 +40,6 @@ return [
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'bot_username' => env('TELEGRAM_BOT_USERNAME'),
         'bot_name' => env('TELEGRAM_BOT_NAME'),
+        'bot_default_session_name' => env('TELEGRAM_BOT_DEFAULT_SESSION_NAME'),
     ],
 ];
