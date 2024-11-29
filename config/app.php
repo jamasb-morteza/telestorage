@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,4 +123,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'super_admin' => [
+        'name' => env('SUPERADMIN_NAME'),
+        'username' => env('SUPERADMIN_USERNAME'),
+        'email' => env('SUPERADMIN_EMAIL'),
+        'phone_number' => env('SUPERADMIN_PHONE_NUMBER'),
+        'password' => env('SUPERADMIN_PASSWORD'),
+    ]
 ];

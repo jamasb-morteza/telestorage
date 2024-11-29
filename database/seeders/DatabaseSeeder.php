@@ -17,14 +17,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()->create([
-            'name' => env('SUPERADMIN_NAME'),
-            'email' => env('SUPERADMIN_EMAIL'),
-            'username' => env('SUPERADMIN_USERNAME'),
-            'phone_number' => env('SUPERADMIN_PHONE_NUMBER'),
+        $user_data = [
+            'name' => config('app.super_admin.name'),
+            'email' => config('app.super_admin.email'),
+            'username' => config('app.super_admin.username'),
+            'phone_number' => config('app.super_admin.phone_number'),
+            'password' => config('app.super_admin.password'),
             'ulid' => Str::orderedUuid()->toString(),
-            'password' => env('SUPERADMIN_PASSWORD'),
-        ]);
+        ];
+
+        dump(compact('user_data'));
+        $user = User::factory()->create($user_data);
         // First create directories
         Directory::factory()->createSampleStructure($user->id);
 
