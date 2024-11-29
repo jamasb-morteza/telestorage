@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Telegram\Bot;
 
 use App\Models\TelegramSession;
 use danog\MadelineProto\API as MadelineAPI;
@@ -8,7 +8,7 @@ use danog\MadelineProto\Settings;
 use Illuminate\Support\Facades\Log;
 use function PHPUnit\Framework\throwException;
 
-class TelegramBotSession
+class TelegramBotSessionService
 {
     private string $telegram_session_name;
     private TelegramSession $telegramSession;
@@ -54,7 +54,7 @@ class TelegramBotSession
         $app_info = (new Settings\AppInfo())
             ->setApiId(config('services.telegram.api_id'))
             ->setApiHash(config('services.telegram.api_hash'));
-
+        dd(config('services.telegram.api_id'));
         $session_db_settings = (new Settings\Database\Mysql())
             ->setUri('tcp://' . config('database.connections.mariadb_sessions.host'))
             ->setDatabase(config('database.connections.mariadb_sessions.database'))
