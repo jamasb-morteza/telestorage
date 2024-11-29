@@ -54,7 +54,7 @@ class TelegramBotSessionService
         $app_info = (new Settings\AppInfo())
             ->setApiId(config('services.telegram.api_id'))
             ->setApiHash(config('services.telegram.api_hash'));
-        dd(config('services.telegram.api_id'));
+
         $session_db_settings = (new Settings\Database\Mysql())
             ->setUri('tcp://' . config('database.connections.mariadb_sessions.host'))
             ->setDatabase(config('database.connections.mariadb_sessions.database'))
