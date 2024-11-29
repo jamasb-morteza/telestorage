@@ -40,7 +40,7 @@ class TelegramBotSession
                 $this->createNewSession();
             }
         } catch (\Exception $e) {
-            Log::error('Telegram session initialization error: ' . $e->getMessage());
+            Log::error('[Telegram] session initialization error: ' . $e->getMessage());
             $this->createNewSession();
         }
     }
@@ -69,8 +69,8 @@ class TelegramBotSession
             $this->madelineProtoAPI = new MadelineAPI($this->telegram_session_name, $settings);
             Log::info('[Telegram] Session initialized successfully', ['session' => $this->telegram_session_name]);
         } catch (\Exception $exception) {
-            Log::info('[Telegram] Failed to initialize session', ['session' => $this->telegram_session_name, 'exception' => $exception->getMessage()]);
-            throwException($exception);
+            Log::info('[Telegram] Failed to initialize new session', ['session' => $this->telegram_session_name, 'exception' => $exception->getMessage()]);
+            throw $exception;
         }
 
         // Perform bot login
@@ -100,8 +100,9 @@ class TelegramBotSession
             ]);
 
             $this->telegramSession->save();
-        } catch (\Exception $e) {
-            Log::error('Failed to update Telegram session record: ' . $e->getMessage());
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Failed to update session record: ' . $exception->getMessage(), ['session_name' => $this->telegram_session_name]);
+            throw $exception;
         }
     }
 
