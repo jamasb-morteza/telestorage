@@ -63,12 +63,14 @@ class TelegramBotSessionService
             ->setUsername(config('database.connections.mariadb_sessions.username'))
             ->setPassword(config('database.connections.mariadb_sessions.password'));
 
-        $log_settings = (new LoggerSettings())
+        /*$log_settings = (new LoggerSettings())
             ->setType(Logger::FILE_LOGGER)
-            ->setExtra(storage_path('logs/madeline_proto.log'));
+            ->setExtra(storage_path('logs/madeline_proto.log'))
+            ->setExtra(storage_path('logs/madeline_proto.log'));*/
+
         $settings->setDb($session_db_settings);
         $settings->setAppInfo($app_info);
-        $settings->setLogger($log_settings);
+
         // Initialize MadelineProto API
         try {
             $this->madelineProtoAPI = new MadelineAPI($this->telegram_session_name, $settings);
