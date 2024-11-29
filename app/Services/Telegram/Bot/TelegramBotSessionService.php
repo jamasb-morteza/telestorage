@@ -6,9 +6,6 @@ use App\Models\TelegramSession;
 use danog\MadelineProto\API as MadelineAPI;
 use danog\MadelineProto\Settings;
 use Illuminate\Support\Facades\Log;
-use danog\MadelineProto\Logger;
-use danog\MadelineProto\Settings\Logger as LoggerSettings;
-use function PHPUnit\Framework\throwException;
 
 class TelegramBotSessionService
 {

@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('bot_token')->nullable();
             $table->integer('api_id')->nullable();
             $table->string('api_hash')->nullable();
-            $table->string('mobile_number')->index();
+            $table->string('mobile_number')->nullable()->index();
             $table->boolean('is_logged_in')->default(false);
             $table->json('additional_data')->nullable();
             $table->tinyInteger('last_session_status')->nullable();
