@@ -13,10 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-        $this->app->singleton('telegram_bot', function ($app) {
-            return new TelegramBotSessionService();
-        });
+
     }
 
     /**
