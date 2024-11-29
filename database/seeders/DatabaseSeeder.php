@@ -18,9 +18,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $user = User::factory()->create([
-            'name' => env('SUPERADMIN_USERNAME'),
-            'email' => 'jamaseb.morteza@gmail.com',
-            'username' => 'm.jamasb',
+            'name' => env('SUPERADMIN_NAME'),
+            'email' => env('SUPERADMIN_EMAIL'),
+            'username' => env('SUPERADMIN_USERNAME'),
+            'phone_number' => env('SUPERADMIN_PHONE_NUMBER'),
             'ulid' => Str::orderedUuid()->toString(),
             'password' => env('SUPERADMIN_PASSWORD'),
         ]);
