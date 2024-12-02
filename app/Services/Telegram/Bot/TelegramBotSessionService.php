@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Bot;
 
 use App\Models\TelegramSession;
+use App\Models\User;
 use danog\MadelineProto\API as MadelineAPI;
 use danog\MadelineProto\Settings;
 use Illuminate\Support\Facades\Log;
@@ -127,5 +128,10 @@ class TelegramBotSessionService
     {
         $this->telegramSession->delete();
         $this->initializeSession();
+    }
+
+    public function generateLinkFor(User $user): string
+    {
+        return url('');
     }
 }

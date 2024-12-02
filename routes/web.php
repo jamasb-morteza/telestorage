@@ -47,7 +47,7 @@ Route::prefix('telegram')->name('telegram.')->group(function () {
 
     // Phone Authentication
     Route::post('/phone-login', [TelegramAuthController::class, 'phoneLogin'])->name('phone-login');
-    Route::post('/verify-code', [TelegramAuthController::class, 'verifyCode'])->name('verify-code');
+    Route::post('/verify-user', [TelegramAuthController::class, 'verifyUser'])->name('verify.user');
 
     // Password Authentication (2FA if enabled)
     Route::post('/verify-password', [TelegramAuthController::class, 'verifyPassword'])->name('verify-password');

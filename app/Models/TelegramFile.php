@@ -6,25 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class File extends Model
+class TelegramFile extends Model
 {
     use HasFactory;
+
     protected $fillable = [
+        'message_id',
+        'directory_id',
+        'user_id',
         'uuid',
         'name',
         'path',
         'size',
         'mime_type',
         'extension',
-        'directory_id',
-        'user_id',
         'metadata',
-        'telegram_peer_id',
         'telegram_file_path',
         'telegram_message_id',
         'last_modified_at'
     ];
     protected $appends = ['type'];
+
     /**
      * Get the directory that owns this file
      */
