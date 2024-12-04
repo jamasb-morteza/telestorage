@@ -3,6 +3,7 @@
 use App\Http\Controllers\FileExplorer\FileExplorerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Telegram\TelegramAPI\TelegramAuthController;
+use App\Http\Controllers\Telegram\TelegramBot\TelegramMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,8 @@ Route::prefix('telegram')->name('telegram.')->group(function () {
     // Session Management
     Route::post('/logout', [TelegramAuthController::class, 'logout'])->name('logout');
     Route::get('/status', [TelegramAuthController::class, 'checkAuthStatus'])->name('status');
+
+    Route::post('/upload/file', [TelegramMessageController::class, 'uploadFile'])->name('telegram.upload.file');
 });
 
 require __DIR__ . '/auth.php';

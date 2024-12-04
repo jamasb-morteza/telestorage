@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Services\Telegram\Bot\TelegramBotSessionService;
 use Illuminate\Support\Facades\Redis;
+use App\Events\FileUploadProgress;
 
 class SendTelegramMessageJob implements ShouldQueue
 {
@@ -27,8 +28,6 @@ class SendTelegramMessageJob implements ShouldQueue
      */
     public function handle(TelegramBotSessionService $telegramBotSessionService): void
     {
-        //
-
         foreach ($this->message->files as $file) {
             $file_id = $file->id;
             $telegramBotSessionService->getAPI()->messages->sendMedia(
@@ -39,12 +38,12 @@ class SendTelegramMessageJob implements ShouldQueue
                     'progress_callback' => function ($uploaded, $total) use ($file_id) {
                         $channel_key = "telegram:upload:{$this->message->user_id}:{$file_id}";
                         $percentage = $total > 0 ? ($uploaded / $total) * 100 : 0;
-                        // Update progress in Redis for show progress in UI
                         Redis::set($channel_key, json_encode([
                             'uploaded' => $uploaded,
                             'total' => $total,
                             'percentage' => $percentage
                         ]));
+                        broadcast(new FileUploadProgress($this->message->user_id, $file_id, $percentage));
                     }
                 ]
             );

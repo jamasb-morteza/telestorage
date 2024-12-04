@@ -48,4 +48,41 @@ class TelegramMessageController extends Controller
             'message_id' => $message->id
         ]);
     }
+
+    public function uploadFile(Request $request)
+    {
+        // Validate request
+        $validated = $request->validate([
+            'files' => 'required|array',
+            'files.*' => 'required|file',
+        ]);
+
+        // Process each file
+        $filesData = [];
+        foreach ($validated['files'] as $file) {
+            $path = $file->store('uploads');
+            $filesData[] = [
+                'name' => $file->getClientOriginalName(),
+                'path' => $path,
+                'size' => $file->getSize(),
+                'mime_type' => $file->getMimeType(),
+            ];
+        }
+
+        // Dispatch job
+        $message = TelegramMessage::create([
+            'message_type' => 'media',
+            'user_id' => auth()->id(),
+            'peer_id' => $request->input('peer_id'),
+            'message_data' => $request->except('files'),
+        ]);
+
+        foreach ($filesData as $fileData) {
+            $message->files()->create($fileData);
+        }
+
+        dispatch(new SendTelegramMessageJob($message));
+
+        return response()->json(['message' => 'Files uploaded successfully']);
+    }
 }
