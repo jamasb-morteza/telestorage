@@ -23,7 +23,8 @@ class TelegramFile extends Model
         'metadata',
         'telegram_file_path',
         'telegram_message_id',
-        'last_modified_at'
+        'last_modified_at',
+        'tmp_file_path'
     ];
     protected $appends = ['type'];
 
