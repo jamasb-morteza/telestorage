@@ -26,3 +26,4 @@ database/telestorage
 **/caddy
 frankenphp
 frankenphp-worker.php
+*.cursorrules

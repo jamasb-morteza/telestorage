@@ -34,18 +34,25 @@ class SendTelegramMessageJob implements ShouldQueue
                 peer: $this->message->peer_id,
                 media: [
                     '_' => 'inputMediaUploadedDocument',
-                    'file' => $file->tmp_file_path,
-                    'progress_callback' => function ($uploaded, $total) use ($file_id) {
-                        $channel_key = "telegram:upload:{$this->message->user_id}:{$file_id}";
-                        $percentage = $total > 0 ? ($uploaded / $total) * 100 : 0;
-                        Redis::set($channel_key, json_encode([
-                            'uploaded' => $uploaded,
-                            'total' => $total,
-                            'percentage' => $percentage
-                        ]));
-                        broadcast(new FileUploadProgress($this->message->user_id, $file_id, $percentage));
-                    }
-                ]
+                    'file' => [
+                        'file' => $file->tmp_file_path,
+                        'on_progress' => function ($uploaded, $total) use ($file_id) {
+                            $channel_key = "telegram:upload:{$this->message->user_id}:{$file_id}";
+                            $percentage = $total > 0 ? ($uploaded / $total) * 100 : 0;
+                            \Log::info('Uploading file: ' . $file_id . ' - ' . $percentage . '%');
+                            Redis::set($channel_key, json_encode([
+                                'uploaded' => $uploaded,
+                                'total' => $total,
+                                'percentage' => $percentage
+                            ]));
+                            broadcast(new FileUploadProgress($this->message->user_id, $file_id, $percentage));
+                        }
+                    ],
+                    'attributes' => [
+                        ['_' => 'documentAttributeFilename', 'file_name' => $file->original_name]
+                    ]
+                ],
+                message: 'Here is your file!'
             );
         }
     }
