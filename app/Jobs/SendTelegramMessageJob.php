@@ -39,13 +39,13 @@ class SendTelegramMessageJob implements ShouldQueue
                         'on_progress' => function ($uploaded, $total) use ($file_id) {
                             $channel_key = "telegram:upload:{$this->message->user_id}:{$file_id}";
                             $percentage = $total > 0 ? ($uploaded / $total) * 100 : 0;
-                            \Log::info('Uploading file: ' . $file_id . ' - ' . $percentage . '%');
-                            Redis::set($channel_key, json_encode([
+                            \Log::info('Uploading file: ' . $channel_key . ' - ' . $percentage . '%');
+                            /* Redis::set($channel_key, json_encode([
                                 'uploaded' => $uploaded,
                                 'total' => $total,
                                 'percentage' => $percentage
                             ]));
-                            broadcast(new FileUploadProgress($this->message->user_id, $file_id, $percentage));
+                            broadcast(new FileUploadProgress($this->message->user_id, $file_id, $percentage)); */
                         }
                     ],
                     'attributes' => [
