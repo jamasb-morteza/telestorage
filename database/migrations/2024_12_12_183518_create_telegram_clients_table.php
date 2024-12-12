@@ -10,10 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::dropIfExists('telegram_clients');
         Schema::create('telegram_clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('user_id')->nullable()->constrained('users', 'id');
             $table->string('telestorage_token', 36)->nullable();
             $table->bigInteger('telegram_user_id')->nullable()->index();
             $table->string('telegram_username', 64)->nullable()->index();
