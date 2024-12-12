@@ -10,7 +10,7 @@ class TelegramClient extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'username',
+        'telegram_username',
         'telestorage_token',
         'telegram_user_id',
         'telegram_bot_api_id',
