@@ -24,11 +24,6 @@ class TelegramSendMediaCommand extends Command
 
     protected $telegram_service;
 
-    public function __construct(TelegramBotSessionService $telegramService)
-    {
-        parent::__construct();
-        $this->telegram_service = $telegramService;
-    }
 
     /**
      * Execute the console command.
@@ -36,6 +31,7 @@ class TelegramSendMediaCommand extends Command
     public function handle()
     {
         //
+        $this->telegram_service = app(TelegramBotSessionService::class);
         $file = $this->argument('file');
         $madelineProto = $this->telegram_service->getAPI();
         $madelineProto->messages->sendMedia(

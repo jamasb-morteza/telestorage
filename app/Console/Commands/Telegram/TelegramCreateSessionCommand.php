@@ -14,7 +14,7 @@ class TelegramCreateSessionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'telegram:session-create {session_name}';
+    protected $signature = 'telegram:session-create {session_name=}';
 
     /**
      * The console command description.
@@ -32,7 +32,10 @@ class TelegramCreateSessionCommand extends Command
     public function handle()
     {
         //
-        $session_name = $this->argument('session_name');
+        $session_name = $this->option('session_name');
+        if (empty($session_name)) {
+            $session_name = config('services.telegram.bot_default_session_name');
+        }
         $this->telegram_service = TelegramSessionService::getInstance($session_name);
         $session_status = $this->telegram_service->getSessionStatus();
         dump(compact('session_status'));

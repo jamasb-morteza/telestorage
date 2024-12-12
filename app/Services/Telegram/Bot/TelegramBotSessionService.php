@@ -23,6 +23,76 @@ class TelegramBotSessionService
         $this->initializeSession();
     }
 
+    public function getAPI(): MadelineAPI
+    {
+        return $this->madelineProtoAPI;
+    }
+
+    public function getSessionModel(): TelegramSession
+    {
+        return $this->telegramSession;
+    }
+
+    /**
+     * Manually refresh or reset the session
+     */
+    public function refreshSession()
+    {
+        $this->telegramSession->delete();
+        $this->initializeSession();
+    }
+
+    public function generateLinkFor(User $user): string
+    {
+        return url('');
+    }
+
+    public function getSessionStatus(): array
+    {
+        $result = [
+            'success' => true,
+            'logged_in' => false,
+            'status_text' => null,
+            'status_code' => null
+        ];
+        try {
+            $status = $this->getAPI()->getAuthorization();
+            $result['session_name'] = $this->telegram_session_name;
+            $result['status_code'] = $status;
+            $result['logged_in'] = $status === MadelineAPI::LOGGED_IN;
+            $result['status_text'] = match ($status) {
+                MadelineAPI::NOT_LOGGED_IN => 'Not Logged in',
+                MadelineAPI::WAITING_CODE => 'Waiting for Code',
+                MadelineAPI::WAITING_SIGNUP => 'Waiting for signup',
+                MadelineAPI::WAITING_PASSWORD => 'Waiting for password',
+                MadelineAPI::LOGGED_IN => 'Logged in',
+                MadelineAPI::LOGGED_OUT => 'Logged out',
+            };
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Failed to get authorization status', [
+                'session' => $this->telegram_session_name,
+                'exception' => $exception->getMessage()
+            ]);
+            throwException($exception);
+        }
+        return $result;
+    }
+
+    public function logout(): array
+    {
+
+        try {
+            $this->madelineProtoAPI->logout();
+        } catch (\Exception $exception) {
+            Log::error('[Telegram] Error logging out ', [
+                'session' => $this->telegram_session_name,
+                'exception' => $exception->getMessage()
+            ]);
+            throwException($exception);
+        }
+        return ['success' => true];
+    }
+
     private function initializeSession()
     {
         try {
@@ -61,10 +131,6 @@ class TelegramBotSessionService
             ->setUsername(config('database.connections.mariadb_sessions.username'))
             ->setPassword(config('database.connections.mariadb_sessions.password'));
 
-        /*$log_settings = (new LoggerSettings())
-            ->setType(Logger::FILE_LOGGER)
-            ->setExtra(storage_path('logs/madeline_proto.log'))
-            ->setExtra(storage_path('logs/madeline_proto.log'));*/
 
         $settings->setDb($session_db_settings);
         $settings->setAppInfo($app_info);
@@ -77,7 +143,6 @@ class TelegramBotSessionService
             Log::info('[Telegram] Failed to initialize new session', ['session' => $this->telegram_session_name, 'exception' => $exception->getMessage()]);
             throw $exception;
         }
-
         // Perform bot login
         $this->madelineProtoAPI->botLogin(config('services.telegram.bot_token'));
 
@@ -111,27 +176,4 @@ class TelegramBotSessionService
         }
     }
 
-    public function getAPI(): MadelineAPI
-    {
-        return $this->madelineProtoAPI;
-    }
-
-    public function getSessionModel(): TelegramSession
-    {
-        return $this->telegramSession;
-    }
-
-    /**
-     * Manually refresh or reset the session
-     */
-    public function refreshSession()
-    {
-        $this->telegramSession->delete();
-        $this->initializeSession();
-    }
-
-    public function generateLinkFor(User $user): string
-    {
-        return url('');
-    }
 }
