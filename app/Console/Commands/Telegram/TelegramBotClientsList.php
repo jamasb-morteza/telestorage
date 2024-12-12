@@ -21,7 +21,7 @@ class TelegramBotClientsList extends Command
      *
      * @var string
      */
-    protected $description = '[Telegram] Create Session Command';
+    protected $description = '[Telegram] Get Telegram Bot clients list';
 
     /**
      * Execute the console command.
@@ -32,7 +32,7 @@ class TelegramBotClientsList extends Command
     public function handle()
     {
         //
-        $madelineProto = app(TelegramBotSessionService::class)->getMadelineAPI();
+        $madelineProto = app(TelegramBotSessionService::class)->getAPI();
         $dialog_ids = $madelineProto->getDialogIds();
         dump($dialog_ids);
         // Process and display the chats
