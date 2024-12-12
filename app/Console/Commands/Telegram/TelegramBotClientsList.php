@@ -48,7 +48,7 @@ class TelegramBotClientsList extends Command
     protected function addToClientsDB(array $client_info): TelegramClient
     {
 
-        dump($client_info);
+        dump($client_info['User']);
         return TelegramClient::firstOrCreate(
             [
                 'telegram_user_id' => $client_info['user_id'],
