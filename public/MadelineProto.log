@@ -18,7 +18,7 @@ Stack trace:
 #14 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/MTProto.php(520): danog\MadelineProto\MTProto->initialize(Object(danog\MadelineProto\Settings))
 #15 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/API.php(219): danog\MadelineProto\MTProto->__construct(Object(danog\MadelineProto\Settings), Object(danog\MadelineProto\APIWrapper))
 #16 /home/jamasb/projects/telestorage/app/Services/Telegram/TelegramSessionService.php(26): danog\MadelineProto\API->__construct('session.madelin...', Object(danog\MadelineProto\Settings))
-#17 [internal function]: App\Services\Telegram\TelegramSessionService->__construct('session.madelin...')
+#17 [internal function]: App\Services\Telegram\API\TelegramSessionService->__construct('session.madelin...')
 #18 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(983): ReflectionClass->newInstanceArgs(Array)
 #19 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(815): Illuminate\Container\Container->build('App\\Services\\Te...')
 #20 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1048): Illuminate\Container\Container->resolve('App\\Services\\Te...', Array, true)
@@ -82,7 +82,7 @@ Stack trace:
 #78 /home/jamasb/projects/telestorage/vendor/laravel/octane/bin/frankenphp-worker.php(74): frankenphp_handle_request(Object(Closure))
 #79 /home/jamasb/projects/telestorage/public/frankenphp-worker.php(3): require('/home/jamasb/pr...')
 #80 {main} while connecting to DC 2.0 via tcp://venus.web.telegram.org:5222/apiw1 main DC 2, via ipv4 using HttpsStream => BufferedRawStream => DefaultStream, trying next...
-Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:443/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream 
+Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:443/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream
 Connection:     	Amp\Socket\ConnectException: Connection to tcp://venus.web.telegram.org:443/apiw1 @ tcp://10.10.34.36:443 refused in /home/jamasb/projects/telestorage/vendor/amphp/socket/src/DnsSocketConnector.php:108
 Stack trace:
 #0 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/Stream/Transport/DefaultStream.php(75): Amp\Socket\DnsSocketConnector->connect('tcp://venus.web...', Object(Amp\Socket\ConnectContext), Object(Amp\NullCancellation))
@@ -102,7 +102,7 @@ Stack trace:
 #14 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/MTProto.php(520): danog\MadelineProto\MTProto->initialize(Object(danog\MadelineProto\Settings))
 #15 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/API.php(219): danog\MadelineProto\MTProto->__construct(Object(danog\MadelineProto\Settings), Object(danog\MadelineProto\APIWrapper))
 #16 /home/jamasb/projects/telestorage/app/Services/Telegram/TelegramSessionService.php(26): danog\MadelineProto\API->__construct('session.madelin...', Object(danog\MadelineProto\Settings))
-#17 [internal function]: App\Services\Telegram\TelegramSessionService->__construct('session.madelin...')
+#17 [internal function]: App\Services\Telegram\API\TelegramSessionService->__construct('session.madelin...')
 #18 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(983): ReflectionClass->newInstanceArgs(Array)
 #19 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(815): Illuminate\Container\Container->build('App\\Services\\Te...')
 #20 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1048): Illuminate\Container\Container->resolve('App\\Services\\Te...', Array, true)
@@ -166,7 +166,7 @@ Stack trace:
 #78 /home/jamasb/projects/telestorage/vendor/laravel/octane/bin/frankenphp-worker.php(74): frankenphp_handle_request(Object(Closure))
 #79 /home/jamasb/projects/telestorage/public/frankenphp-worker.php(3): require('/home/jamasb/pr...')
 #80 {main} while connecting to DC 2.0 via tcp://venus.web.telegram.org:443/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream, trying next...
-Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:80/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream 
+Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:80/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream
 Connection:     	Amp\Socket\ConnectException: Connection to tcp://venus.web.telegram.org:80/apiw1 @ tcp://10.10.34.36:80 refused in /home/jamasb/projects/telestorage/vendor/amphp/socket/src/DnsSocketConnector.php:108
 Stack trace:
 #0 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/Stream/Transport/DefaultStream.php(75): Amp\Socket\DnsSocketConnector->connect('tcp://venus.web...', Object(Amp\Socket\ConnectContext), Object(Amp\NullCancellation))
@@ -186,7 +186,7 @@ Stack trace:
 #14 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/MTProto.php(520): danog\MadelineProto\MTProto->initialize(Object(danog\MadelineProto\Settings))
 #15 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/API.php(219): danog\MadelineProto\MTProto->__construct(Object(danog\MadelineProto\Settings), Object(danog\MadelineProto\APIWrapper))
 #16 /home/jamasb/projects/telestorage/app/Services/Telegram/TelegramSessionService.php(26): danog\MadelineProto\API->__construct('session.madelin...', Object(danog\MadelineProto\Settings))
-#17 [internal function]: App\Services\Telegram\TelegramSessionService->__construct('session.madelin...')
+#17 [internal function]: App\Services\Telegram\API\TelegramSessionService->__construct('session.madelin...')
 #18 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(983): ReflectionClass->newInstanceArgs(Array)
 #19 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(815): Illuminate\Container\Container->build('App\\Services\\Te...')
 #20 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1048): Illuminate\Container\Container->resolve('App\\Services\\Te...', Array, true)
@@ -250,7 +250,7 @@ Stack trace:
 #78 /home/jamasb/projects/telestorage/vendor/laravel/octane/bin/frankenphp-worker.php(74): frankenphp_handle_request(Object(Closure))
 #79 /home/jamasb/projects/telestorage/public/frankenphp-worker.php(3): require('/home/jamasb/pr...')
 #80 {main} while connecting to DC 2.0 via tcp://venus.web.telegram.org:80/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream, trying next...
-Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:88/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream 
+Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:88/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream
 Connection:     	Amp\Socket\ConnectException: Connecting to tcp://venus.web.telegram.org:88/apiw1 @ tcp://10.10.34.36:88 failed: timeout exceeded (5.000 s) in /home/jamasb/projects/telestorage/vendor/amphp/socket/src/DnsSocketConnector.php:92
 Stack trace:
 #0 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/Stream/Transport/DefaultStream.php(75): Amp\Socket\DnsSocketConnector->connect('tcp://venus.web...', Object(Amp\Socket\ConnectContext), Object(Amp\NullCancellation))
@@ -270,7 +270,7 @@ Stack trace:
 #14 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/MTProto.php(520): danog\MadelineProto\MTProto->initialize(Object(danog\MadelineProto\Settings))
 #15 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/API.php(219): danog\MadelineProto\MTProto->__construct(Object(danog\MadelineProto\Settings), Object(danog\MadelineProto\APIWrapper))
 #16 /home/jamasb/projects/telestorage/app/Services/Telegram/TelegramSessionService.php(26): danog\MadelineProto\API->__construct('session.madelin...', Object(danog\MadelineProto\Settings))
-#17 [internal function]: App\Services\Telegram\TelegramSessionService->__construct('session.madelin...')
+#17 [internal function]: App\Services\Telegram\API\TelegramSessionService->__construct('session.madelin...')
 #18 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(983): ReflectionClass->newInstanceArgs(Array)
 #19 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(815): Illuminate\Container\Container->build('App\\Services\\Te...')
 #20 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1048): Illuminate\Container\Container->resolve('App\\Services\\Te...', Array, true)
@@ -334,7 +334,7 @@ Stack trace:
 #78 /home/jamasb/projects/telestorage/vendor/laravel/octane/bin/frankenphp-worker.php(74): frankenphp_handle_request(Object(Closure))
 #79 /home/jamasb/projects/telestorage/public/frankenphp-worker.php(3): require('/home/jamasb/pr...')
 #80 {main} while connecting to DC 2.0 via tcp://venus.web.telegram.org:88/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream, trying next...
-Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:5222/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream 
+Connection:     	Connecting to DC 2.0 via tcp://venus.web.telegram.org:5222/apiw1 main DC 2, via ipv6 using HttpsStream => BufferedRawStream => DefaultStream
 Connection:     	Amp\Socket\ConnectException: Connecting to tcp://venus.web.telegram.org:5222/apiw1 @ tcp://10.10.34.36:5222 failed: timeout exceeded (5.000 s) in /home/jamasb/projects/telestorage/vendor/amphp/socket/src/DnsSocketConnector.php:92
 Stack trace:
 #0 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/Stream/Transport/DefaultStream.php(75): Amp\Socket\DnsSocketConnector->connect('tcp://venus.web...', Object(Amp\Socket\ConnectContext), Object(Amp\NullCancellation))
@@ -354,7 +354,7 @@ Stack trace:
 #14 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/MTProto.php(520): danog\MadelineProto\MTProto->initialize(Object(danog\MadelineProto\Settings))
 #15 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/API.php(219): danog\MadelineProto\MTProto->__construct(Object(danog\MadelineProto\Settings), Object(danog\MadelineProto\APIWrapper))
 #16 /home/jamasb/projects/telestorage/app/Services/Telegram/TelegramSessionService.php(26): danog\MadelineProto\API->__construct('session.madelin...', Object(danog\MadelineProto\Settings))
-#17 [internal function]: App\Services\Telegram\TelegramSessionService->__construct('session.madelin...')
+#17 [internal function]: App\Services\Telegram\API\TelegramSessionService->__construct('session.madelin...')
 #18 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(983): ReflectionClass->newInstanceArgs(Array)
 #19 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(815): Illuminate\Container\Container->build('App\\Services\\Te...')
 #20 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1048): Illuminate\Container\Container->resolve('App\\Services\\Te...', Array, true)
@@ -429,7 +429,7 @@ Stack trace:
 #6 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/MTProto.php(520): danog\MadelineProto\MTProto->initialize(Object(danog\MadelineProto\Settings))
 #7 /home/jamasb/projects/telestorage/vendor/danog/madelineproto/src/API.php(219): danog\MadelineProto\MTProto->__construct(Object(danog\MadelineProto\Settings), Object(danog\MadelineProto\APIWrapper))
 #8 /home/jamasb/projects/telestorage/app/Services/Telegram/TelegramSessionService.php(26): danog\MadelineProto\API->__construct('session.madelin...', Object(danog\MadelineProto\Settings))
-#9 [internal function]: App\Services\Telegram\TelegramSessionService->__construct('session.madelin...')
+#9 [internal function]: App\Services\Telegram\API\TelegramSessionService->__construct('session.madelin...')
 #10 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(983): ReflectionClass->newInstanceArgs(Array)
 #11 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Container/Container.php(815): Illuminate\Container\Container->build('App\\Services\\Te...')
 #12 /home/jamasb/projects/telestorage/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1048): Illuminate\Container\Container->resolve('App\\Services\\Te...', Array, true)
@@ -495,5 +495,13 @@ Stack trace:
 #72 {main}
 MTProto:        	Prompting final serialization (SHUTDOWN)...
 MTProto:        	Done final serialization (SHUTDOWN)!
-Connection:     	Connecting to DC 2.0 via tcp://149.154.167.51:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream 
+Connection:     	Connecting to DC 2.0 via tcp://149.154.167.51:443 main DC 2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream
 AbstractServer: 	Accepted IPC client connection!
+Logger:         	MadelineProto 8.3.5
+Logger:         	Copyright (C) 2016-2024 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto
+Logger:         	MadelineProto 8.3.5
+Logger:         	Copyright (C) 2016-2024 Daniil Gentili
+Logger:         	Licensed under AGPLv3
+Logger:         	https://github.com/danog/MadelineProto

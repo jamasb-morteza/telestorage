@@ -9,16 +9,17 @@ use Kalnoy\Nestedset\NodeTrait;
 
 class Directory extends Model
 {
-    
+
     use NodeTrait, HasFactory;
 
     protected $fillable = [
         'name',
         'path',
         'uuid',
-        'user_id'
+        'user_id',
     ];
     protected $appends = ['type'];
+
     /**
      * Get all files in this directory
      */

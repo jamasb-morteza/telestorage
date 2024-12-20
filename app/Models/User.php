@@ -19,8 +19,14 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
+        'phone_number',
+        'ulid',
         'email',
         'password',
+        'user_info',
+        'bot_verification_token',
+        'bot_verification_token_expire_at',
     ];
 
     /**
@@ -45,4 +51,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
 }

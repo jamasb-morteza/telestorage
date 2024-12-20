@@ -33,19 +33,21 @@ class FileFactory extends Factory
         ];
     }
 
-    public function createSampleFiles()
+    public function createSampleFiles($user_id)
     {
         // Get directories by name
         $directories = \App\Models\Directory::all()->keyBy('name');
 
         // Create document files
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'annual_report_2023.pdf',
             'directory_id' => $directories['Reports']->id,
             'mime_type' => 'application/pdf',
         ]);
-        
+
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'project_plan.docx',
             'directory_id' => $directories['Projects']->id,
             'mime_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -53,6 +55,7 @@ class FileFactory extends Factory
 
         // Create tax documents
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'tax_return_2023.pdf',
             'directory_id' => $directories['Taxes']->id,
             'mime_type' => 'application/pdf',
@@ -60,6 +63,7 @@ class FileFactory extends Factory
 
         // Create receipts
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'amazon_purchase.pdf',
             'directory_id' => $directories['Receipts']->id,
             'mime_type' => 'application/pdf',
@@ -67,12 +71,14 @@ class FileFactory extends Factory
 
         // Create pictures
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'beach_sunset.jpg',
             'directory_id' => $directories['Vacation']->id,
             'mime_type' => 'image/jpeg',
         ]);
-        
+
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'family_reunion.jpg',
             'directory_id' => $directories['Family']->id,
             'mime_type' => 'image/jpeg',
@@ -80,21 +86,24 @@ class FileFactory extends Factory
 
         // Create music files
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'bohemian_rhapsody.mp3',
             'directory_id' => $directories['Rock']->id,
             'mime_type' => 'audio/mpeg',
         ]);
-        
+
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'take_five.mp3',
             'directory_id' => $directories['Jazz']->id,
             'mime_type' => 'audio/mpeg',
         ]);
-        
+
         File::factory()->create([
+            'user_id' => $user_id,
             'name' => 'moonlight_sonata.mp3',
             'directory_id' => $directories['Classical']->id,
             'mime_type' => 'audio/mpeg',
         ]);
     }
-} 
+}

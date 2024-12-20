@@ -4,6 +4,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+/public/session.madeline
 /storage/pail
 /vendor
 .env
@@ -20,7 +21,9 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+database/telestorage
 
 **/caddy
 frankenphp
 frankenphp-worker.php
+*.cursorrules

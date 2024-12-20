@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileExplorer\FileExplorerController;
-use App\Http\Controllers\Telegram\TelegramAuthController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Telegram\TelegramAPI\TelegramAuthController;
+use App\Http\Controllers\Telegram\TelegramBot\TelegramMessageController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,7 +48,7 @@ Route::prefix('telegram')->name('telegram.')->group(function () {
 
     // Phone Authentication
     Route::post('/phone-login', [TelegramAuthController::class, 'phoneLogin'])->name('phone-login');
-    Route::post('/verify-code', [TelegramAuthController::class, 'verifyCode'])->name('verify-code');
+    Route::post('/verify-user', [TelegramAuthController::class, 'verifyUser'])->name('verify.user');
 
     // Password Authentication (2FA if enabled)
     Route::post('/verify-password', [TelegramAuthController::class, 'verifyPassword'])->name('verify-password');
@@ -55,6 +56,8 @@ Route::prefix('telegram')->name('telegram.')->group(function () {
     // Session Management
     Route::post('/logout', [TelegramAuthController::class, 'logout'])->name('logout');
     Route::get('/status', [TelegramAuthController::class, 'checkAuthStatus'])->name('status');
+
+    Route::post('/upload/file', [TelegramMessageController::class, 'uploadFile'])->name('telegram.upload.file');
 });
 
 require __DIR__ . '/auth.php';
